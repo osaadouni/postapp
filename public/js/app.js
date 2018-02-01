@@ -43180,6 +43180,9 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+//
 //
 //
 //
@@ -43317,7 +43320,9 @@ var DeleteModal = __webpack_require__(79);
             deleteActive: false,
 
             post: {},
-            searchQuery: ''
+            searchQuery: '',
+
+            authenticated: false
         };
     },
 
@@ -43333,6 +43338,10 @@ var DeleteModal = __webpack_require__(79);
             return this.posts.data.filter(function (item) {
                 return item.title.toLowerCase().includes(_this.searchQuery.toLowerCase()) || item.body.toLowerCase().includes(_this.searchQuery.toLowerCase());
             });
+        },
+        isAuthenticated: function isAuthenticated() {
+
+            return this.authenticated;
         }
     },
 
@@ -43391,6 +43400,14 @@ var DeleteModal = __webpack_require__(79);
     created: function created() {
 
         console.log('PostsComponent: created()...');
+
+        console.log('window.Laravel');
+        //console.log(window.Laravel);
+
+        if (_typeof(window.Laravel.user) !== ( true ? 'undefined' : _typeof(undefined)) && null !== window.Laravel.user) {
+            console.log(window.Laravel.user);
+            this.authenticated = true;
+        }
 
         this.getPosts();
     }
@@ -43456,6 +43473,11 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "panel-body" }, [
+          _vm._v(
+            "\n\n             " +
+              _vm._s(_vm.isAuthenticated) +
+              "\n\n            "
+          ),
           _c(
             "span",
             { staticClass: "pull-right" },
@@ -45384,7 +45406,7 @@ exports = module.exports = __webpack_require__(45)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* enable absolute positioning */\n.inner-addon { \n   position: relative; \n   margin-right:3px;\n}\n\n/* style icon */\n.inner-addon .fa {\n    position: absolute;\n    padding: 10px;\n  pointer-events: none;\n}\n\n/* align icon */\n.left-addon .fa  { left:  0px;\n}\n.right-addon .fa { right: 0px;\n}\n\n/* add padding  */\n.left-addon input  { padding-left:  30px;\n}\n.right-addon input { padding-right: 30px;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* enable absolute positioning */\n.inner-addon { \n   position: relative; \n   margin-right:3px;\n}\n\n/* style icon */\n.inner-addon .fa {\n    position: absolute;\n    padding: 10px;\n  pointer-events: none;\n}\n\n/* align icon */\n.left-addon .fa  { left:  0px;\n}\n.right-addon .fa { right: 0px;\n}\n\n/* add padding  */\n.left-addon input  { padding-left:  30px;\n}\n.right-addon input { padding-right: 30px;\n}\n", ""]);
 
 // exports
 

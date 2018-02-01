@@ -22,6 +22,7 @@
             </div>
             <div class="panel-body">
 
+                 {{ isAuthenticated }}
 
                 <span class="pull-right">
                     <vue-pagination  :pagination="posts" :offset="4" @paginate="getPosts()"> </vue-pagination>
@@ -136,6 +137,8 @@ export default{
 
             post: {}, 
             searchQuery: '',
+
+            authenticated: false,
         }
 
     }, 
@@ -153,6 +156,12 @@ export default{
                 return item.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
                 item.body.toLowerCase().includes(this.searchQuery.toLowerCase());
             })
+        }, 
+
+        isAuthenticated() {
+
+            return this.authenticated;
+
         }
     },
 
@@ -222,6 +231,14 @@ export default{
     created() { 
 
         console.log('PostsComponent: created()...');
+
+        console.log('window.Laravel');
+        //console.log(window.Laravel);
+
+        if (typeof window.Laravel.user !== typeof undefined  && null !== window.Laravel.user) { 
+            console.log(window.Laravel.user); 
+            this.authenticated = true;
+        }
 
         this.getPosts();
     }

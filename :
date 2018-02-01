@@ -90,5 +90,18 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
 
+    <script>
+
+        window.Laravel = {!!
+            json_encode([
+                'csrfToken' => csrf_token(), 
+                'user'      => Auth::user(), 
+                'api_token' => (Auth::user()) ? Auth::user()->api_token : null 
+                ])
+        !!};
+
+        console.log(window.Laravel);
+
+    </script>
 </body>
 </html>
