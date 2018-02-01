@@ -1,0 +1,167 @@
+<template>
+
+    <div class="container">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <h4 class="panel-title pull-left">
+                    Posts
+                </h4>
+                <button class="btn btn-primary pull-right" @click="addPost">
+                    Add New
+                </button>
+                <div class="clearfix"></div>
+            </div>
+            <div class="panel-body">
+
+                <span class="pull-right">
+                    <vue-pagination  :pagination="posts" :offset="4" @paginate="getPosts()"> </vue-pagination>
+                </span>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                        <th>Title</th>
+                        <th>Created At</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr v-for="post in posts.data">
+
+                            <td>{{ post.title }}</td>
+
+                            <td>{{ post.created_at }}</td>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+
+                <span class="pull-right">
+                    <vue-pagination  :pagination="posts" :offset="4" @paginate="getPosts()"> </vue-pagination>
+                </span>
+            </div>
+        </div>
+
+
+         <add-modal :openModal="addActive" @closeRequest='closeModal'></add-modal>
+
+    </div>
+
+
+</template>
+
+
+<script>
+
+let vuePagination = require('./PaginationComponent.vue');
+let AddModal = require('./AddComponent.vue');
+
+export default{
+
+    components: { 
+
+        vuePagination,
+
+        AddModal
+    }, 
+
+    /** 
+    props: {
+        pagination: {
+          type: Object,
+          required: true
+        },
+        offset: {
+          type: Number,
+          default: 4
+        }
+    },
+    **/
+
+    data() { 
+    
+        return { 
+
+            posts: { 
+        
+                total: 0, 
+
+                per_page: 20, 
+
+                from: 1, 
+
+                to: 0, 
+
+                current_page: 1
+            }, 
+
+            offset: 4, 
+
+            // modal props
+            addActive:    false, 
+            showActive:   false, 
+            editActive:   false, 
+            removeActive: false,
+
+        }
+
+    }, 
+
+
+    computed: {
+    },
+
+    methods: {
+
+        getPosts() { 
+        
+            console.log('getPosts()...');
+            console.log('current_page: ' + this.posts.current_page );
+
+            axios.get(`/posts?page=${this.posts.current_page}`)
+                .then((response) => { 
+
+                    this.posts = response.data;
+
+                })
+                .catch((error) => { 
+
+                    console.log('Handle server error from here.');
+                    console.log(response);
+
+                });
+        }, 
+
+        addPost() { 
+        
+            console.log('addPost()...');
+
+            this.addActive = 'is-active';
+
+        },
+
+        closeModal() {
+    
+            console.log('closeModal()...');
+        }
+    }, 
+
+    mounted() { 
+            
+        console.log('PostsComponent: mounted()...');
+
+    }, 
+
+    created() { 
+
+        console.log('PostsComponent: created()...');
+
+        this.getPosts();
+    }
+
+  }
+</script>
