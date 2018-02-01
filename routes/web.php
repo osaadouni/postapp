@@ -15,6 +15,11 @@ Route::get('/', function () {
     return view('posts.index');
 });
 
+Route::post('favorite/{post}', 'PostController@favoritePost');
+Route::post('unfavorite/{post}', 'PostController@unFavoritePost');
+
+Route::get('my_favorites', 'UsersController@myFavorites')->middleware('auth');
+
 Route::resource('posts', 'PostController');
 
 Auth::routes();

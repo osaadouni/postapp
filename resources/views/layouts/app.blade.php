@@ -76,6 +76,10 @@
                                             {{ csrf_field() }}
                                         </form>
                                     </li>
+
+                                    <li>
+                                        <a href="{{ url('my_favorites') }}">My Favorites</a>
+                                    </li>
                                 </ul>
                             </li>
                         @endguest
