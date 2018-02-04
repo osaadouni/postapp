@@ -19,6 +19,7 @@ window.Vue = require('vue');
 let postsComponent =  require('./components/PostsComponent.vue');
 
 const app = new Vue({
+
     el: '#app',
 
     components: {

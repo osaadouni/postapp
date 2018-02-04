@@ -26,6 +26,8 @@ export default {
     },
 
     mounted() { 
+
+        console.log('Favorite: mounted()...');
     
         this.isFavorited = this.isFavorite ? true : false; // isFavorite() <= computed prop 
     }, 
@@ -35,6 +37,24 @@ export default {
         isFavorite() { 
             return this.favorited;  <= prop
         }
+    },
+
+    methods: {
+            
+        favorite(post) { 
+
+            axios.post('/favorite/'+post)
+                .then(response => this.isFavorited = true)
+                .catch(response => console.log(response.data));
+        }, 
+
+        unFavorite(post) { 
+    
+            axios.post('/unfavorite/'+post)
+                .then(response => this.isFavorited = false)
+                .catch(response => console.log(response.data));
+        }
+
     }
 
 

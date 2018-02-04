@@ -50,6 +50,7 @@
                                 <button class="btn btn-xs btn-info"><i class="fa fa-eye" @click="showPost(post)"></i></button>
                                 <button class="btn btn-xs btn-primary"><i class="fa fa-pencil-square-o" @click="editPost(post)"></i></button>
                                 <button class="btn btn-xs btn-danger"><i class="fa fa-trash-o" @click="deletePost(post)"></i></button>
+                                <favorite :post="post" :favorited="false"></favorite>
                             </td>
 
                         </tr>
@@ -83,6 +84,8 @@ let ShowModal = require('./ShowComponent.vue');
 let EditModal = require('./EditComponent.vue');
 let DeleteModal = require('./DeleteComponent.vue');
 
+let FavoriteButton = require('./Favorite.vue');
+
 export default{
 
     components: { 
@@ -92,7 +95,9 @@ export default{
         AddModal, 
         ShowModal, 
         EditModal,
-        DeleteModal
+        DeleteModal, 
+
+        'favorite': FavoriteButton
     }, 
 
     /** 

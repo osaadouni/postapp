@@ -123,9 +123,9 @@ class PostController extends Controller
 
         return $post;
 
-        /* Auth::user()->favorites()->attach($post->id);
-
-        return back();
+        /* 
+         Auth::user()->favorites()->attach($post->id);
+         return back();
         */
 
     }
@@ -139,14 +139,14 @@ class PostController extends Controller
     public function UnFavoritePost(Post $post) 
     {
 
-        Log::info('favoritePost()...');
+        Log::info('UnFavoritePost()...');
 
         Log::info($post);
 
         return $post;
 
-        /* Auth::user()->favorites()->attach($post->id);
-
+        /* 
+        Auth::user()->favorites()->detach($post->id);
         return back();
         */
 
