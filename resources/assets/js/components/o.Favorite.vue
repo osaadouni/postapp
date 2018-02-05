@@ -67,11 +67,7 @@ export default {
             //this.$forceUpdate();
 
             axios.post('/favorite/'+post.id)
-                .then(response => { 
-                    //this.isFavorited = true)
-                    console.log('emit favorite event!');
-                    this.$eventHub.$emit('updateFavoriteStatus', { post: post, favStatus: true });
-                })
+                .then(response => this.isFavorited = true)
                 .catch(response => console.log(response.data));
         }, 
 
@@ -80,12 +76,7 @@ export default {
             console.log('unFavorite():' ); console.log(post.id );
     
             axios.post('/unfavorite/'+post.id)
-                .then(response => { 
-                    // this.isFavorited = false)
-                    console.log('emit unfavorite event!');
-                    this.$eventHub.$emit('updateFavoriteStatus', { post: post, favStatus: false });
-                        
-                })
+                .then(response => this.isFavorited = false)
                 .catch(response => console.log(response.data));
         }
 

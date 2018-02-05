@@ -78,7 +78,7 @@
                                     </li>
 
                                     <li>
-                                        <a href="{{ url('my_favorites') }}">My Favorites</a>
+                                        <a href="{{ url('home/favorite') }}">My Favorites</a>
                                     </li>
                                 </ul>
                             </li>

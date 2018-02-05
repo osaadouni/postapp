@@ -1408,13 +1408,20 @@ window.Vue = __webpack_require__(38);
 
 //Vue.component('posts-component', require('./components/PostsComponent.vue'));
 var postsComponent = __webpack_require__(41);
+var favoritePosts = __webpack_require__(88);
+
+/** 
+ * Create a global Event hub 
+ */
+Vue.prototype.$eventHub = new Vue();
 
 var app = new Vue({
 
     el: '#app',
 
     components: {
-        'vue-posts': postsComponent
+        'vue-posts': postsComponent,
+        'favorite-posts': favoritePosts
     },
 
     mounted: function mounted() {
@@ -43417,7 +43424,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* enable absolute positioning */\n.inner-addon { \n   position: relative; \n   margin-right:3px;\n}\n\n/* style icon */\n.inner-addon .fa {\n    position: absolute;\n    padding: 10px;\n  pointer-events: none;\n}\n\n/* align icon */\n.left-addon .fa  { left:  0px;\n}\n.right-addon .fa { right: 0px;\n}\n\n/* add padding  */\n.left-addon input  { padding-left:  30px;\n}\n.right-addon input { padding-right: 30px;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* enable absolute positioning */\n.inner-addon { \n   position: relative; \n   margin-right:3px;\n}\n\n/* style icon */\n.inner-addon .fa {\n    position: absolute;\n    padding: 10px;\n  pointer-events: none;\n}\n\n/* align icon */\n.left-addon .fa  { left:  0px;\n}\n.right-addon .fa { right: 0px;\n}\n\n/* add padding  */\n.left-addon input  { padding-left:  30px;\n}\n.right-addon input { padding-right: 30px;\n}\n", ""]);
 
 // exports
 
@@ -43541,6 +43548,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
+//
+//
+//
 
 
 var vuePagination = __webpack_require__(46);
@@ -43549,7 +43559,7 @@ var ShowModal = __webpack_require__(54);
 var EditModal = __webpack_require__(59);
 var DeleteModal = __webpack_require__(64);
 
-var FavoriteButton = __webpack_require__(69);
+var FavoriteComponent = __webpack_require__(69);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
@@ -43562,7 +43572,7 @@ var FavoriteButton = __webpack_require__(69);
         EditModal: EditModal,
         DeleteModal: DeleteModal,
 
-        'favorite': FavoriteButton
+        'favorite': FavoriteComponent
     },
 
     /** 
@@ -43696,6 +43706,15 @@ var FavoriteButton = __webpack_require__(69);
         }
 
         this.getPosts();
+
+        // take care of favorite flag update
+        this.$eventHub.$on('updateFavoriteStatus', function (data) {
+            console.log('Incoming => updateFavoriteStatus ');
+            console.log(data);
+            console.log(data.post.id);
+            console.log(data.favStatus);
+            data.post.favorite = data.favStatus;
+        });
     }
 });
 
@@ -45236,8 +45255,10 @@ module.exports = Component.exports
 
 /***/ }),
 /* 70 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
@@ -45251,6 +45272,82 @@ module.exports = Component.exports
 //
 //
 //
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+    props: ['post', 'favorited'],
+
+    data: function data() {
+
+        return {
+
+            isFavorited: this.favorited
+        };
+    },
+    mounted: function mounted() {
+
+        //console.log('[Favorite]: mounted()...');
+
+        this.isFavorited = this.isFavorite ? true : false; // isFavorite() <= computed prop 
+
+        console.log('this.isFavorited: ' + this.isFavorited);
+    },
+    beforeMount: function beforeMount() {
+        console.log('beforeMount()...');
+    },
+    created: function created() {
+
+        console.log('[Favorite]: created()...');
+    },
+
+
+    watch: {
+        isFavorited: function isFavorited(v) {
+            console.log('[Watch isFavorited()] .. v = ' + v);
+        }
+    },
+
+    computed: {
+        isFavorite: function isFavorite() {
+            console.log('[isFavorite()] this.post.id: ' + this.post.id + '; this.isFavorited: ' + this.isFavorited);
+            this.isFavorited = this.favorited; // <= prop
+            return this.favorited; // <= prop
+        }
+    },
+
+    methods: {
+        favorite: function favorite(post) {
+            var _this = this;
+
+            console.log('favorite():');console.log(post.id);
+
+            //this.$forceUpdate();
+
+            axios.post('/favorite/' + post.id).then(function (response) {
+                //this.isFavorited = true)
+                console.log('emit favorite event!');
+                _this.$eventHub.$emit('updateFavoriteStatus', { post: post, favStatus: true });
+            }).catch(function (response) {
+                return console.log(response.data);
+            });
+        },
+        unFavorite: function unFavorite(post) {
+            var _this2 = this;
+
+            console.log('unFavorite():');console.log(post.id);
+
+            axios.post('/unfavorite/' + post.id).then(function (response) {
+                // this.isFavorited = false)
+                console.log('emit unfavorite event!');
+                _this2.$eventHub.$emit('updateFavoriteStatus', { post: post, favStatus: false });
+            }).catch(function (response) {
+                return console.log(response.data);
+            });
+        }
+    }
+
+});
 
 /***/ }),
 /* 71 */
@@ -45261,7 +45358,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("span", [
-    _vm.isFavorited
+    _vm.isFavorite
       ? _c(
           "a",
           {
@@ -45273,7 +45370,16 @@ var render = function() {
               }
             }
           },
-          [_c("i", { staticClass: "fa fa-heart" })]
+          [
+            _c("i", { staticClass: "fa fa-heart" }),
+            _vm._v(
+              "  / isFav=" +
+                _vm._s(_vm.isFavorited) +
+                " / fav=" +
+                _vm._s(_vm.favorited) +
+                "\n    "
+            )
+          ]
         )
       : _c(
           "a",
@@ -45286,7 +45392,16 @@ var render = function() {
               }
             }
           },
-          [_c("i", { staticClass: "fa fa-heart-o" })]
+          [
+            _c("i", { staticClass: "fa fa-heart-o" }),
+            _vm._v(
+              "  / isFav=" +
+                _vm._s(_vm.isFavorited) +
+                " / fav=" +
+                _vm._s(_vm.favorited) +
+                "\n    "
+            )
+          ]
         )
   ])
 }
@@ -45391,7 +45506,15 @@ var render = function() {
                 "tbody",
                 _vm._l(_vm.filteredList, function(post, key) {
                   return _c("tr", [
-                    _c("td", [_vm._v(_vm._s(key) + ". " + _vm._s(post.title))]),
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(key) +
+                          ".(#" +
+                          _vm._s(post.id) +
+                          ") - " +
+                          _vm._s(post.title)
+                      )
+                    ]),
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(post.created_at))]),
                     _vm._v(" "),
@@ -45436,7 +45559,7 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("favorite", {
-                          attrs: { post: post, favorited: false }
+                          attrs: { post: post, favorited: post.favorite }
                         })
                       ],
                       1
@@ -45526,6 +45649,472 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */,
+/* 86 */,
+/* 87 */,
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(89)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(91)
+/* template */
+var __vue_template__ = __webpack_require__(92)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/FavoritePosts.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-516e1120", Component.options)
+  } else {
+    hotAPI.reload("data-v-516e1120", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(90);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("170253e0", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-516e1120\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FavoritePosts.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-516e1120\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FavoritePosts.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* enable absolute positioning */\n.inner-addon { \n   position: relative; \n   margin-right:3px;\n}\n\n/* style icon */\n.inner-addon .fa {\n    position: absolute;\n    padding: 10px;\n  pointer-events: none;\n}\n\n/* align icon */\n.left-addon .fa  { left:  0px;\n}\n.right-addon .fa { right: 0px;\n}\n\n/* add padding  */\n.left-addon input  { padding-left:  30px;\n}\n.right-addon input { padding-right: 30px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 91 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+var vuePagination = __webpack_require__(46);
+var FavoriteComponent = __webpack_require__(69);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+    components: {
+
+        vuePagination: vuePagination,
+        'favorite': FavoriteComponent
+    },
+
+    data: function data() {
+
+        return {
+
+            posts: {
+
+                total: 0,
+
+                per_page: 20,
+
+                from: 1,
+
+                to: 0,
+
+                current_page: 1,
+
+                data: []
+            },
+
+            offset: 4,
+
+            post: {},
+            searchQuery: '',
+
+            authenticated: false
+        };
+    },
+
+
+    computed: {
+        filteredList: function filteredList() {
+            var _this = this;
+
+            console.log('filteredList()...');
+
+            console.log(this.posts);
+
+            return this.posts.data.filter(function (item) {
+                return item.title.toLowerCase().includes(_this.searchQuery.toLowerCase()) || item.body.toLowerCase().includes(_this.searchQuery.toLowerCase());
+            });
+        },
+        isAuthenticated: function isAuthenticated() {
+
+            return this.authenticated;
+        }
+    },
+
+    methods: {
+        getPosts: function getPosts() {
+            var _this2 = this;
+
+            console.log('getPosts()...');
+            console.log('current_page: ' + this.posts.current_page);
+
+            axios.get('/my_favorites?page=' + this.posts.current_page).then(function (response) {
+
+                console.log(response);
+
+                _this2.posts = response.data;
+            }).catch(function (error) {
+
+                console.log('Handle server error from here.');
+                console.log(response);
+            });
+        }
+    },
+
+    mounted: function mounted() {
+
+        console.log('FavoritePosts: mounted()...');
+    },
+    created: function created() {
+
+        console.log('FavoritePosts: created()...');
+
+        console.log('window.Laravel');
+        //console.log(window.Laravel);
+
+        if (_typeof(window.Laravel.user) !== ( true ? 'undefined' : _typeof(undefined)) && null !== window.Laravel.user) {
+            console.log(window.Laravel.user);
+            this.authenticated = true;
+        }
+
+        this.getPosts();
+    }
+});
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "panel panel-default" }, [
+      _c("div", { staticClass: "panel-heading" }, [
+        _c("h4", { staticClass: "panel-title pull-left" }, [
+          _vm._v("\n                Posts "),
+          _c("span", { staticClass: "badge" }, [
+            _vm._v(_vm._s(_vm.posts.total) + " ")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "inner-addon left-addon pull-right" }, [
+          _c("i", { staticClass: "fa fa-search" }),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.searchQuery,
+                expression: "searchQuery"
+              }
+            ],
+            staticClass: "form-control pull-right",
+            attrs: { type: "text", id: "searchQuery" },
+            domProps: { value: _vm.searchQuery },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.searchQuery = $event.target.value
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "clearfix" })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "panel-body" }, [
+        _vm._v(
+          "\n\n             " + _vm._s(_vm.isAuthenticated) + "\n\n            "
+        ),
+        _c(
+          "span",
+          { staticClass: "pull-right" },
+          [
+            _c("vue-pagination", {
+              attrs: { pagination: _vm.posts, offset: 4 },
+              on: {
+                paginate: function($event) {
+                  _vm.getPosts()
+                }
+              }
+            })
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "table",
+          { staticClass: "table table-bordered table-striped table-hover" },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.filteredList, function(post, key) {
+                return _c("tr", [
+                  _c("td", [
+                    _vm._v(
+                      _vm._s(key) +
+                        ".(#" +
+                        _vm._s(post.id) +
+                        ") - " +
+                        _vm._s(post.title)
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(post.created_at))]),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    [
+                      _c("button", { staticClass: "btn btn-xs btn-info" }, [
+                        _c("i", {
+                          staticClass: "fa fa-eye",
+                          on: {
+                            click: function($event) {
+                              _vm.showPost(post)
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("button", { staticClass: "btn btn-xs btn-primary" }, [
+                        _c("i", {
+                          staticClass: "fa fa-pencil-square-o",
+                          on: {
+                            click: function($event) {
+                              _vm.editPost(post)
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("button", { staticClass: "btn btn-xs btn-danger" }, [
+                        _c("i", {
+                          staticClass: "fa fa-trash-o",
+                          on: {
+                            click: function($event) {
+                              _vm.deletePost(post)
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("favorite", {
+                        attrs: { post: post, favorited: post.favorite }
+                      })
+                    ],
+                    1
+                  )
+                ])
+              })
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "span",
+          { staticClass: "pull-right" },
+          [
+            _c("vue-pagination", {
+              attrs: { pagination: _vm.posts, offset: 4 },
+              on: {
+                paginate: function($event) {
+                  _vm.getPosts()
+                }
+              }
+            })
+          ],
+          1
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Title")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Created At")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Actions")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-516e1120", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

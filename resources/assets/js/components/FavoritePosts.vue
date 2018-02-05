@@ -8,9 +8,6 @@
                 <h4 class="panel-title pull-left">
                     Posts <span class="badge">{{ posts.total }} </span>
                 </h4>
-                <button class="btn btn-primary pull-right" @click="addPost">
-                    Add New
-                </button>
 
                 <div class="inner-addon left-addon pull-right">
                     <i class="fa fa-search"></i>
@@ -67,12 +64,6 @@
             </div>
         </div>
 
-
-         <add-modal v-if="addActive" :openModal="addActive" @close='closeModal' @refresh="getPosts"></add-modal>
-         <show-modal v-if="showActive" :openModal="showActive" :post="post" @close='closeModal'></show-modal>
-         <edit-modal v-if="editActive" :openModal="editActive" :post="post" @close='closeModal'></edit-modal>
-         <delete-modal v-if="deleteActive" :openModal="deleteActive" :post="post" @close='closeModal' @refresh="getPosts"></delete-modal>
-
     </div>
 
 
@@ -82,11 +73,6 @@
 <script>
 
 let vuePagination = require('./PaginationComponent.vue');
-let AddModal = require('./AddComponent.vue');
-let ShowModal = require('./ShowComponent.vue');
-let EditModal = require('./EditComponent.vue');
-let DeleteModal = require('./DeleteComponent.vue');
-
 let FavoriteComponent = require('./Favorite.vue');
 
 export default{
@@ -94,27 +80,8 @@ export default{
     components: { 
 
         vuePagination,
-
-        AddModal, 
-        ShowModal, 
-        EditModal,
-        DeleteModal, 
-
         'favorite': FavoriteComponent
     }, 
-
-    /** 
-    props: {
-        pagination: {
-          type: Object,
-          required: true
-        },
-        offset: {
-          type: Number,
-          default: 4
-        }
-    },
-    **/
 
     data() { 
     
@@ -136,12 +103,6 @@ export default{
             }, 
 
             offset: 4, 
-
-            // modal props
-            addActive:    false, 
-            showActive:   false, 
-            editActive:   false, 
-            deleteActive: false,
 
             post: {}, 
             searchQuery: '',
@@ -180,7 +141,7 @@ export default{
             console.log('getPosts()...');
             console.log('current_page: ' + this.posts.current_page );
 
-            axios.get(`/posts?page=${this.posts.current_page}`)
+            axios.get(`/my_favorites?page=${this.posts.current_page}`)
                 .then((response) => { 
 
                     console.log(response);
@@ -196,50 +157,17 @@ export default{
                 });
         }, 
 
-        addPost() { 
-            console.log('addPost()...');
-            this.addActive = true;
-        },
-
-        showPost(post) { 
-            console.log('showPost()...');
-            this.showActive = true;
-            this.post = post;
-        },
-
-        editPost(post) { 
-            console.log('editPost()...');
-            this.editActive = true;
-            this.post = post;
-        },
-
-        deletePost(post) { 
-            console.log('deletePost()...');
-            this.deleteActive = true;
-            this.post = post;
-        },
-
-        closeModal() {
-    
-            console.log('closeModal()...');
-
-            this.addActive    = false;
-            this.showActive   = false;
-            this.editActive   = false;
-            this.deleteActive = false;
-        }
-
     }, 
 
     mounted() { 
             
-        console.log('PostsComponent: mounted()...');
+        console.log('FavoritePosts: mounted()...');
 
     }, 
 
     created() { 
 
-        console.log('PostsComponent: created()...');
+        console.log('FavoritePosts: created()...');
 
         console.log('window.Laravel');
         //console.log(window.Laravel);
@@ -251,14 +179,6 @@ export default{
 
         this.getPosts();
 
-        // take care of favorite flag update
-        this.$eventHub.$on('updateFavoriteStatus', (data) => { 
-            console.log('Incoming => updateFavoriteStatus ');
-            console.log(data);
-            console.log(data.post.id);
-            console.log(data.favStatus);
-            data.post.favorite = data.favStatus;
-        })
     }
 
   }

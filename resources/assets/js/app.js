@@ -17,13 +17,20 @@ window.Vue = require('vue');
 
 //Vue.component('posts-component', require('./components/PostsComponent.vue'));
 let postsComponent =  require('./components/PostsComponent.vue');
+let favoritePosts =  require('./components/FavoritePosts.vue');
+
+/** 
+ * Create a global Event hub 
+ */
+Vue.prototype.$eventHub = new Vue();
 
 const app = new Vue({
 
     el: '#app',
 
     components: {
-        'vue-posts': postsComponent 
+        'vue-posts': postsComponent,
+        'favorite-posts': favoritePosts,
     }, 
 
     mounted() {

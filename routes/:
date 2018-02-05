@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -21,22 +20,19 @@ class PostController extends Controller
         Log::info('index()...');
 
         $posts = Post::orderBy('id', 'DESC')->paginate(10);
-        //Log::info($posts);
+        Log::info($posts);
 
         foreach ($posts as $post) {
-            //Log::info($post->id . ' => ' . $post->title. ' : ' . $post->favorite);
-            Log::info($post->id . ' => ' . $post->favorite);
+            Log::info($post->id . ' => ' . $post->title . ': ' . $post->favorited());
         }
-
-        /* 
-        $newposts = $posts->map(function($post) {
+        $data = $posts->data;
+        $newposts = $data->map(function($post) {
             $post->favorited = $post->favorited();
             return $post;
         });
         Log::info($newposts);
-         */
 
-        return response()->json($posts);
+        return response()->json($newposts);
 
         //
         //return view('posts.index');
@@ -135,14 +131,11 @@ class PostController extends Controller
 
         Log::info($post);
 
-        Auth::user()->favorites()->attach($post->id);
-
-        //return $post;
+        return $post;
 
         /* 
          Auth::user()->favorites()->attach($post->id);
-         //return back();
-         return response()->json(['message'=> 'Post updated successfully!']);
+         return back();
         */
 
     }
@@ -160,8 +153,7 @@ class PostController extends Controller
 
         Log::info($post);
 
-        Auth::user()->favorites()->detach($post->id);
-        //return $post;
+        return $post;
 
         /* 
         Auth::user()->favorites()->detach($post->id);

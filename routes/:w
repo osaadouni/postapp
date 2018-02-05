@@ -23,7 +23,7 @@ class Post extends Model
      *
      * @var array
      */
-    protected $appends = ['favorite'];
+    protected $appends = ['is_favorite'];
 
     /**
      *  Determine whether a post has been marked as favorite by a user.
@@ -44,9 +44,8 @@ class Post extends Model
      * @param nothing
      * @return string 
      */
-    public function getFavoriteAttribute() 
+    public function getIsFavoriteAttribute() 
     {
-        //return $this->attributes['is_favorite'] == $this->favorited();
-        return $this->favorited();
+        return $this->attributes['favorite'] == $this->favorited();
     }
 }
