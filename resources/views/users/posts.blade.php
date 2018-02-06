@@ -2,6 +2,6 @@
 
 @section('content')
 
- <favorite-posts></favorite-posts>
+ <user-posts></user-posts>
 
 @endsection

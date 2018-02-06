@@ -6,8 +6,14 @@
 
             <div class="panel-heading">
                 <h4 class="panel-title pull-left">
-                    My Favorite Posts <span class="badge">{{ posts.total }} </span>
+                    My Posts <span class="badge">{{ posts.total }} </span>
                 </h4>
+
+                <button class="btn btn-primary pull-right" @click="addPost" v-if="isAuthenticated">
+                  Add New
+                </button>
+
+
 
                 <div class="inner-addon left-addon pull-right">
                     <i class="fa fa-search"></i>
@@ -44,7 +50,10 @@
 
                             <td>
 
-                                <favorite :post="post" :favorited="post.favorite"></favorite>
+                                <button class="btn btn-xs btn-info"><i class="fa fa-eye" @click="showPost(post)"></i></button>
+                                <button class="btn btn-xs btn-primary"><i class="fa fa-pencil-square-o" @click="editPost(post)"></i></button>
+                                <button class="btn btn-xs btn-danger"><i class="fa fa-trash-o" @click="deletePost(post)"></i></button>
+
 
                                 
                             </td>
@@ -60,6 +69,16 @@
             </div>
         </div>
 
+
+        <add-modal v-if="addActive" :openModal="addActive" @close='closeModal' @refresh="getPosts"></add-modal>
+
+        <show-modal v-if="showActive" :openModal="showActive" :post="post" @close='closeModal'></show-modal>
+
+        <edit-modal v-if="editActive" :openModal="editActive" :post="post" @close='closeModal'></edit-modal>
+
+        <delete-modal v-if="deleteActive" :openModal="deleteActive" :post="post" @close='closeModal' @refresh="getPosts"></delete-modal>
+
+
     </div>
 
 
@@ -69,14 +88,24 @@
 <script>
 
 let vuePagination = require('./PaginationComponent.vue');
-let FavoriteComponent = require('./Favorite.vue');
+let AddModal = require('./AddComponent.vue');
+let ShowModal = require('./ShowComponent.vue');
+let EditModal = require('./EditComponent.vue');
+let DeleteModal = require('./DeleteComponent.vue');
+
+
 
 export default{
 
     components: { 
 
         vuePagination,
-        'favorite': FavoriteComponent
+
+        AddModal, 
+        ShowModal, 
+        EditModal,
+        DeleteModal, 
+
     }, 
 
     data() { 
@@ -101,9 +130,17 @@ export default{
             offset: 4, 
 
             post: {}, 
+
             searchQuery: '',
 
             authenticated: false,
+
+            // modal props
+            addActive:    false, 
+            showActive:   false, 
+            editActive:   false, 
+            deleteActive: false,
+
         }
 
     }, 
@@ -137,7 +174,7 @@ export default{
             console.log('getPosts()...');
             console.log('current_page: ' + this.posts.current_page );
 
-            axios.get(`/my_favorites?page=${this.posts.current_page}`)
+            axios.get(`/home/posts/user?page=${this.posts.current_page}`)
                 .then((response) => { 
 
                     console.log(response);
@@ -152,6 +189,38 @@ export default{
 
                 });
         }, 
+
+        addPost() { 
+            console.log('addPost()...');
+            this.addActive = true;
+        },
+
+        showPost(post) { 
+            console.log('showPost()...');
+            this.showActive = true;
+            this.post = post;
+        },
+
+        editPost(post) { 
+            console.log('editPost()...');
+            this.editActive = true;
+            this.post = post;
+        },
+
+        deletePost(post) { 
+            console.log('deletePost()...');
+            this.deleteActive = true;
+            this.post = post;
+        },
+
+        closeModal() {
+
+            console.log('closeModal()...');
+            this.addActive    = false;
+            this.showActive   = false;
+            this.editActive   = false;
+            this.deleteActive = false;
+        }
 
     }, 
 

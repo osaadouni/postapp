@@ -28,6 +28,18 @@ class UsersController extends Controller
     }
 
     /**
+     * Display a listing of the user posts.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function posts()
+    {
+        //
+        //return Post::simplePaginate();
+        Log::info(__METHOD__);
+        return view('users.posts');
+    }
+    /**
      * Get all favorite posts of user
      *  
      * @return Response
@@ -35,7 +47,7 @@ class UsersController extends Controller
     public function myFavorites()
     {
         Log::info(__METHOD__);
-        $posts = Auth::user()->favorites()->paginate(2);
+        $posts = Auth::user()->favorites()->paginate(5);
         Log::info($posts);
 
         //return view('users.my_favorites', compact('myFavorites'));
@@ -43,4 +55,21 @@ class UsersController extends Controller
 
     }
 
+    /**
+     * Get all posts of user
+     *  
+     * @return Response
+     */ 
+    public function myPosts()
+    {
+        Log::info(__METHOD__);
+
+        $posts = Auth::user()->posts()->orderBy('id', 'DESC')->paginate(10);
+        Log::info($posts);
+
+        Log::info(Auth::user()->id);
+
+        return response()->json($posts);
+
+    }
 }

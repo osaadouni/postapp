@@ -8,9 +8,6 @@
                 <h4 class="panel-title pull-left">
                     Posts <span class="badge">{{ posts.total }} </span>
                 </h4>
-                <button class="btn btn-primary pull-right" @click="addPost">
-                    Add New
-                </button>
 
                 <div class="inner-addon left-addon pull-right">
                     <i class="fa fa-search"></i>
@@ -22,7 +19,7 @@
             </div>
             <div class="panel-body">
 
-                 {{ isAuthenticated }}
+                auth: {{ isAuthenticated }} - userID: {{ user_id }}
 
                 <span class="pull-right">
                     <vue-pagination  :pagination="posts" :offset="4" @paginate="getPosts()"> </vue-pagination>
@@ -48,10 +45,8 @@
                             <td>
 
                                 <button class="btn btn-xs btn-info"><i class="fa fa-eye" @click="showPost(post)"></i></button>
-                                <button class="btn btn-xs btn-primary"><i class="fa fa-pencil-square-o" @click="editPost(post)"></i></button>
-                                <button class="btn btn-xs btn-danger"><i class="fa fa-trash-o" @click="deletePost(post)"></i></button>
-
-                                <favorite :post="post" :favorited="post.favorite"></favorite>
+                                
+                                <favorite :post="post" :favorited="post.favorite" v-if="!post.owner"></favorite>
 
                                 
                             </td>
@@ -68,10 +63,7 @@
         </div>
 
 
-         <add-modal v-if="addActive" :openModal="addActive" @close='closeModal' @refresh="getPosts"></add-modal>
          <show-modal v-if="showActive" :openModal="showActive" :post="post" @close='closeModal'></show-modal>
-         <edit-modal v-if="editActive" :openModal="editActive" :post="post" @close='closeModal'></edit-modal>
-         <delete-modal v-if="deleteActive" :openModal="deleteActive" :post="post" @close='closeModal' @refresh="getPosts"></delete-modal>
 
     </div>
 
@@ -95,10 +87,7 @@ export default{
 
         vuePagination,
 
-        AddModal, 
         ShowModal, 
-        EditModal,
-        DeleteModal, 
 
         'favorite': FavoriteComponent
     }, 
@@ -138,15 +127,13 @@ export default{
             offset: 4, 
 
             // modal props
-            addActive:    false, 
             showActive:   false, 
-            editActive:   false, 
-            deleteActive: false,
 
             post: {}, 
             searchQuery: '',
 
             authenticated: false,
+            user_id: '',
         }
 
     }, 
@@ -196,26 +183,9 @@ export default{
                 });
         }, 
 
-        addPost() { 
-            console.log('addPost()...');
-            this.addActive = true;
-        },
-
         showPost(post) { 
             console.log('showPost()...');
             this.showActive = true;
-            this.post = post;
-        },
-
-        editPost(post) { 
-            console.log('editPost()...');
-            this.editActive = true;
-            this.post = post;
-        },
-
-        deletePost(post) { 
-            console.log('deletePost()...');
-            this.deleteActive = true;
             this.post = post;
         },
 
@@ -223,10 +193,7 @@ export default{
     
             console.log('closeModal()...');
 
-            this.addActive    = false;
             this.showActive   = false;
-            this.editActive   = false;
-            this.deleteActive = false;
         }
 
     }, 
@@ -247,6 +214,8 @@ export default{
         if (typeof window.Laravel.user !== typeof undefined  && null !== window.Laravel.user) { 
             console.log(window.Laravel.user); 
             this.authenticated = true;
+            this.user_id = window.Laravel.user.id;
+
         }
 
         this.getPosts();

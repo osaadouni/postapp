@@ -24,8 +24,7 @@ class PostController extends Controller
         //Log::info($posts);
 
         foreach ($posts as $post) {
-            //Log::info($post->id . ' => ' . $post->title. ' : ' . $post->favorite);
-            Log::info($post->id . ' => ' . $post->favorite);
+            Log::info("id: ". $post->id . '; user_id: '. $post->user_id. '; favorite => ' . $post->favorite. "; owner: ". $post->owner );
         }
 
         /* 
@@ -61,15 +60,23 @@ class PostController extends Controller
     public function store(Request $request)
     {
         //
-        Log::info('store()...');
+        Log::info(__METHOD__); //'store()...');
         Log::info($request);
+        Log::info(Auth::user());
+
         // method 3
         //
         $validatedData = $this->validate($request, [
                     'title' => 'required',
                     'body' => 'required',
         ]);
+
+        $validatedData['user_id']=Auth::id();
+
+        Log::info($validatedData);
+
         return Post::create($validatedData);
+
         //return response()->json(['message'=> 'Phonebook record created successfully!']);
         
     }
@@ -134,6 +141,12 @@ class PostController extends Controller
         Log::info('favoritePost()...');
 
         Log::info($post);
+
+        if ( !Auth::check()) { 
+            Log::info("Not logged on!");
+            return response()->json(['error'=> 'User not authenticated!', 'error_code'=>'auth']);
+
+        }
 
         Auth::user()->favorites()->attach($post->id);
 

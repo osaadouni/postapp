@@ -15,7 +15,7 @@ class Post extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'body'];
+    protected $fillable = ['title', 'body', 'user_id'];
     
 
     /**
@@ -23,7 +23,7 @@ class Post extends Model
      *
      * @var array
      */
-    protected $appends = ['favorite'];
+    protected $appends = ['favorite', 'owner'];
 
     /**
      *  Determine whether a post has been marked as favorite by a user.
@@ -48,5 +48,17 @@ class Post extends Model
     {
         //return $this->attributes['is_favorite'] == $this->favorited();
         return $this->favorited();
+    }
+
+
+    /**
+     * Get The post's owner attr
+     *
+     * @param nothing
+     * @return string 
+     */
+    public function getOwnerAttribute() 
+    {
+        return $this->user_id == Auth::id(); 
     }
 }
